@@ -6,6 +6,7 @@ window.engine = (function () {
 
   let bag = [];
   let dropTimer = 0;
+  let spawnProtectionTimer = 0;
 
   // --- 7-bag randomizer ---
   function shuffle(arr) {
@@ -75,6 +76,7 @@ window.engine = (function () {
     }
     gs.currentPiece = piece;
     dropTimer = 0;
+    spawnProtectionTimer = 200;
   }
 
   // --- Movement ---
@@ -100,6 +102,7 @@ window.engine = (function () {
 
   function moveDown() {
     if (!gs.currentPiece || gs.gameOver || gs.paused) return;
+    if (spawnProtectionTimer > 0) return;
     gs.currentPiece.y++;
     if (!isValid(gs.currentPiece)) {
       gs.currentPiece.y--;
@@ -243,6 +246,7 @@ window.engine = (function () {
     },
     update(dt) {
       if (!gs.currentPiece || gs.gameOver || gs.paused) return;
+      if (spawnProtectionTimer > 0) spawnProtectionTimer -= dt;
       dropTimer += dt;
       if (dropTimer >= gs.dropInterval) {
         gs.currentPiece.y++;
