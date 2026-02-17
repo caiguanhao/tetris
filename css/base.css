@@ -1,0 +1,73 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg-color: #1a1a2e;
+  --panel-bg: #16213e;
+  --panel-border: #0f3460;
+  --text-color: #e0e0e0;
+  --text-muted: #888;
+  --accent: #e94560;
+  --grid-line: rgba(255, 255, 255, 0.05);
+  --font-main: 'Courier New', Courier, monospace;
+  --cell-size: 30px;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-main);
+  overflow: hidden;
+}
+
+#game-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  height: 100vh;
+  padding: 20px;
+}
+
+#board-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+#side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 160px;
+}
+
+#overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+#overlay .screen {
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  #game-container {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+  }
+  #side-panel {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+  }
+}

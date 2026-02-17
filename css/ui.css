@@ -1,0 +1,139 @@
+/* ui.css — Side panel, overlays, touch controls */
+
+/* --- Side Panel --- */
+#next-piece-container,
+#score-panel,
+#controls-info {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  padding: 12px;
+}
+
+#next-piece-container h3,
+#controls-info h3 {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+#next-piece {
+  display: block;
+  margin: 0 auto;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+/* --- Stats --- */
+.stat {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.stat:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.stat-value {
+  color: var(--accent);
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+/* --- Controls Info --- */
+#controls-info p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* --- Overlays --- */
+#overlay {
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 0.3s;
+}
+
+#overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#overlay .screen h1 {
+  font-size: 2.5rem;
+  color: var(--accent);
+  margin-bottom: 16px;
+  text-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+}
+
+#overlay .screen p {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+#final-score {
+  font-size: 1.2rem;
+  color: var(--text-color);
+  font-weight: bold;
+}
+
+/* --- Touch Buttons --- */
+#touch-controls {
+  display: none;
+  position: fixed;
+  bottom: 16px;
+  left: 0;
+  right: 0;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 16px;
+  z-index: 50;
+}
+
+.touch-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid var(--panel-border);
+  background: var(--panel-bg);
+  color: var(--text-color);
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  opacity: 0.85;
+}
+
+.touch-btn:active {
+  background: var(--accent);
+  border-color: var(--accent);
+  opacity: 1;
+}
+
+@media (pointer: coarse) {
+  #touch-controls {
+    display: flex;
+  }
+  #controls-info {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  #overlay .screen h1 {
+    font-size: 1.8rem;
+  }
+}

@@ -1,0 +1,13 @@
+/* Board canvas styles — teammate: renderer */
+#board-wrapper {
+  border: 2px solid var(--panel-border);
+  background: #0a0a1a;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+#board {
+  display: block;
+}
+
