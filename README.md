@@ -15,6 +15,9 @@ A classic Tetris game built entirely in the browser with pure HTML, CSS, and Jav
 - Next piece preview
 - Progressive difficulty with level system
 - Line clear flash animation
+- Procedural sound effects using Web Audio API
+- Procedural background music with track switching
+- Auto-pause on window blur / visibility change
 - High score persistence (localStorage)
 - Responsive design with mobile touch controls
 
@@ -57,12 +60,15 @@ tetris/
 ├── index.html          # Main HTML entry point
 ├── CLAUDE.md           # Architecture documentation
 ├── README.md           # This file
-├── screenshot.png      # Game screenshot
+├── screenshot.png      # Start screen screenshot
+├── gameplay.png        # Gameplay screenshot
 ├── js/
 │   ├── game.js         # Core scaffolding (event bus, state, game loop)
 │   ├── engine.js       # Game logic module
 │   ├── renderer.js     # Canvas rendering module
-│   └── ui.js           # Input handling & UI module
+│   ├── ui.js           # Input handling & UI module
+│   ├── audio.js        # Procedural sound effects (Web Audio API)
+│   └── music.js        # Procedural background music
 └── css/
     ├── base.css        # Base styles & layout
     ├── board.css       # Board canvas styling
