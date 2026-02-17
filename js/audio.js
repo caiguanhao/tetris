@@ -3,7 +3,7 @@ window.audio = (function () {
   var ctx = null;
   var muted = false;
   var lastHardDrop = 0;
-  var MUTE_KEY = 'tetris_muted';
+  var MUTE_KEY = 'tetris_sfx_muted';
 
   function ensureContext() {
     if (!ctx) {
@@ -100,45 +100,85 @@ window.audio = (function () {
     playTone('sine', 784, 0.1, null, c.currentTime + 0.18);  // G5
   }
 
-  // --- Mute toggle ---
+  // --- SFX mute toggle ---
 
-  function toggleMute() {
+  function toggleSfxMute() {
     muted = !muted;
     localStorage.setItem(MUTE_KEY, muted ? '1' : '0');
-    updateMuteButton();
+    updateSfxButton();
   }
 
-  var muteBtn = null;
+  var sfxBtn = null;
+  var musicBtn = null;
+  var trackBtn = null;
 
-  function updateMuteButton() {
-    if (muteBtn) muteBtn.textContent = muted ? '\u{1F507} Unmute' : '\u{1F50A} Mute';
+  function setBtnContent(btn, icon, text) {
+    btn.innerHTML = '';
+    var iconSpan = document.createElement('span');
+    iconSpan.textContent = icon;
+    var textSpan = document.createElement('span');
+    textSpan.textContent = text;
+    btn.appendChild(iconSpan);
+    btn.appendChild(textSpan);
   }
 
-  function createMuteButton() {
+  function updateSfxButton() {
+    if (sfxBtn) setBtnContent(sfxBtn, muted ? '\u{1F507}' : '\u{1F50A}', 'SFX');
+  }
+
+  function createAudioControls() {
     var panel = document.getElementById('side-panel');
     if (!panel) return;
-    muteBtn = document.createElement('button');
-    muteBtn.id = 'mute-btn';
-    muteBtn.style.cssText = 'margin-top:12px;padding:6px 12px;cursor:pointer;font-size:14px;background:#222;color:#fff;border:1px solid #555;border-radius:4px;width:100%;';
-    muteBtn.addEventListener('click', toggleMute);
-    panel.appendChild(muteBtn);
-    updateMuteButton();
+
+    var container = document.createElement('div');
+    container.id = 'audio-controls';
+    sfxBtn = document.createElement('button');
+    sfxBtn.id = 'sfx-btn';
+    sfxBtn.className = 'audio-btn';
+    sfxBtn.addEventListener('click', toggleSfxMute);
+
+    musicBtn = document.createElement('button');
+    musicBtn.id = 'music-btn';
+    musicBtn.className = 'audio-btn';
+    musicBtn.addEventListener('click', function () {
+      window.events.emit('toggle-music-mute');
+    });
+
+    trackBtn = document.createElement('button');
+    trackBtn.id = 'track-btn';
+    trackBtn.className = 'audio-btn';
+    trackBtn.addEventListener('click', function () {
+      window.events.emit('cycle-track');
+    });
+
+    container.appendChild(sfxBtn);
+    container.appendChild(musicBtn);
+    container.appendChild(trackBtn);
+    panel.appendChild(container);
+
+    updateSfxButton();
+    // Initial labels for music/track will be set by event listeners
+    setBtnContent(musicBtn, '\u{1F3B5}', 'Music');
+    setBtnContent(trackBtn, '\u266A', 'Track');
   }
 
-  function addMuteHint() {
+  function addControlHints() {
     var info = document.getElementById('controls-info');
     if (!info) return;
-    var p = document.createElement('p');
-    p.textContent = 'M Mute';
-    info.appendChild(p);
+    var hints = ['M SFX Mute', 'N Music Mute', 'T Track'];
+    for (var i = 0; i < hints.length; i++) {
+      var p = document.createElement('p');
+      p.textContent = hints[i];
+      info.appendChild(p);
+    }
   }
 
   // --- Init ---
 
   function init() {
     muted = localStorage.getItem(MUTE_KEY) === '1';
-    createMuteButton();
-    addMuteHint();
+    createAudioControls();
+    addControlHints();
 
     var ev = window.events;
     ev.on('input-left', playMove);
@@ -152,9 +192,23 @@ window.audio = (function () {
     ev.on('game-over', playGameOver);
     ev.on('game-start', playGameStart);
 
+    // Listen for music module state changes
+    ev.on('music-mute-changed', function (data) {
+      if (musicBtn) setBtnContent(musicBtn, data.muted ? '\u{1F507}' : '\u{1F3B5}', 'Music');
+    });
+
+    ev.on('track-changed', function (data) {
+      if (trackBtn) setBtnContent(trackBtn, '\u266A', data.name);
+    });
+
     document.addEventListener('keydown', function (e) {
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
       if (e.key === 'm' || e.key === 'M') {
-        if (!e.ctrlKey && !e.metaKey && !e.altKey) toggleMute();
+        toggleSfxMute();
+      } else if (e.key === 'n' || e.key === 'N') {
+        ev.emit('toggle-music-mute');
+      } else if (e.key === 't' || e.key === 'T') {
+        ev.emit('cycle-track');
       }
     });
   }

@@ -56,6 +56,29 @@
   line-height: 1.6;
 }
 
+/* --- Audio Controls --- */
+#audio-controls {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+}
+
+.audio-btn {
+  padding: 2px 4px;
+  cursor: pointer;
+  font-size: 12px;
+  background: #222;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 4px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+}
+
 /* --- Overlays --- */
 #overlay {
   background: rgba(0, 0, 0, 0.7);
