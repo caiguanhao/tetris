@@ -178,8 +178,8 @@ window.engine = (function () {
     if (cleared.length === 0) return;
 
     // Remove cleared rows and add empty ones at top
-    for (const r of cleared) {
-      gs.board.splice(r, 1);
+    gs.board = gs.board.filter((_, i) => !cleared.includes(i));
+    for (let i = 0; i < cleared.length; i++) {
       gs.board.unshift(Array(window.COLS).fill(null));
     }
 
