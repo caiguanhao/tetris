@@ -55,6 +55,22 @@ window.ui = (function () {
     events.on('game-start', onGameStart);
     events.on('game-over', onGameOver);
     events.on('game-pause', onGamePause);
+
+    // Auto-pause when tab loses visibility
+    document.addEventListener('visibilitychange', function () {
+      var gs = window.gameState;
+      if (document.hidden && gs.started && !gs.gameOver && !gs.paused) {
+        events.emit('input-pause');
+      }
+    });
+
+    // Auto-pause when browser window loses focus (e.g., Alt+Tab)
+    window.addEventListener('blur', function () {
+      var gs = window.gameState;
+      if (gs.started && !gs.gameOver && !gs.paused) {
+        events.emit('input-pause');
+      }
+    });
   }
 
   // --- Keyboard ---
